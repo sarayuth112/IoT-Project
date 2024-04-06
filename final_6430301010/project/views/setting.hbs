@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+
+
+<head>
+  <script type="text/javascript" language="javascript" src="../assets/js/core/jquery-1.12.0.min.js"></script>
+  <title>Setting</title>
+  <style>
+    /* Style for buttons */
+    .button-container {
+      padding: 10px 15px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .button {
+      background-color: #4CAF50;
+      /* Green */
+      border: none;
+      color: white;
+      padding: 12px 22px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+
+    .button:hover {
+      background-color: #45a049;
+      /* Darker green on hover */
+    }
+
+    /* Style for buttons with class 'on' or 'off' */
+    .on {
+      background-color: #4CAF50;
+      /* Green */
+    }
+
+    .off {
+      background-color: #f44336;
+      /* Red */
+    }
+
+    /* Style for text inputs */
+    .input-container {
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 24px;
+    }
+
+    input[type=text] {
+      width: 20%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      /* ปรับขนาดฟอนต์ตามที่ต้องการ */
+    }
+
+    input[type=text]:focus {
+      border: 3px solid #4CAF50;
+    }
+
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 20px 0;
+      text-align: center;
+    }
+  </style>
+</head>
+{{>navbar}}
+
+<body>
+  <header>
+    <h1>Setting</h1>
+  </header>
+  <div class="col-md-6">
+    <div class="card ">
+      <div class="card-header input-container">
+        Water Timer: <input type="text" id="watertimer" placeholder="Enter water timer">
+        <div class="button-container">
+          <button id="water-status-buttonOn" class="button on" onclick="setWaterPump('on')" type="submit">on</button>
+          <button id="water-status-buttonOff" class="button off" onclick="setWaterPump('off')"
+            type="submit">off</button>
+        </div>
+      </div>
+      <div class="card-header input-container">
+        Fertilizer volume: <input type="text" id="fertilizer" placeholder="Enter fertilizer volume">
+        <div class="button-container">
+          <button id="fertilizer-status-buttonOn" class="button on" onclick="setFertilizer('on')"
+            type="submit">On</button>
+          <button id="fertilizer-status-buttonOff" class="button off" onclick="setFertilizer('off')"
+            type="submit">off</button>
+        </div>
+      </div>
+      <div class="card-header input-container">
+        Light: <input type="text" id="light" placeholder="Enter light">
+        <div class="button-container">
+          <button id="light-status-buttonOn" class="button on" onclick="setLight('on')" type="submit">On</button>
+          <button id="light-status-buttonOff" class="button off" onclick="setLight('off')" type="submit">off</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <script>
+
+    console.log("tetststs");
+    const socket = new WebSocket('ws://10.64.69.33:3001');
+
+    socket.addEventListener('open', function (event) {
+      //alert("XXXXXXXXXXXX");
+      console.log('Connected to WS Server')
+    });
+    socket.addEventListener('message', function (event) {
+      var obj = JSON.parse(event.data);
+      obj.forEach(st => {
+
+        var waterOn = document.getElementById("water-status-buttonOn");
+        var waterOff = document.getElementById("water-status-buttonOff");
+
+        var ferilizerOn = document.getElementById("fertilizer-status-buttonOn");
+        var ferilizerOff = document.getElementById("fertilizer-status-buttonOff");
+
+        var lightOn = document.getElementById("light-status-buttonOn");
+        var lightOff = document.getElementById("light-status-buttonOff");
+
+
+
+        var idlight = "light";
+        fetch(`/getstatus?device=${idlight}&status`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('status not found');
+            }
+            return response.json();
+          })
+          .then(data => {
+            console.log("Recieving: " + data);
+            console.log(data.status)
+            if (data.device === "light" && data.status === "on") {
+              buttonOn.innerHTML = "กำลังเปิด"
+              buttonOff.innerHTML = "OFF"
+            } else if (data.device === "light" && data.status === "off") {
+              buttonOff.innerHTML = "กำลังปิด"
+              buttonOn.innerHTML = "ON"
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error.message);
+            buttonOn.innerHTML = "status not found";
+            buttonOff.innerHTML = "status not found";
+          });
+
+        var idwater = "pump";
+        fetch(`/getstatus?device=${idwater}&status`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('status not found');
+            }
+            return response.json();
+          })
+          .then(data => {
+            console.log("Recieving: " + data);
+            console.log(data.status)
+            if (data.device === "pump" && data.status === "on") {
+              waterOn.innerHTML = "กำลังเปิด"
+              waterOff.innerHTML = "OFF"
+            } else if (data.device === "pump" && data.status === "off") {
+              waterOff.innerHTML = "กำลังปิด"
+              waterOn.innerHTML = "ON"
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error.message);
+            buttonOn.innerHTML = "status not found";
+            buttonOff.innerHTML = "status not found";
+          });
+
+        var idfer = "fertilizer";
+        fetch(`/getstatus?device=${idfer}&status`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('status not found');
+            }
+            return response.json();
+          })
+          .then(data => {
+            console.log("Recieving: " + data);
+            console.log(data.status)
+            if (data.device === "fertilizer" && data.status === "on") {
+              ferOn.innerHTML = "กำลังเปิด"
+              ferOff.innerHTML = "OFF"
+            } else if (data.device === "fertilizer" && data.status === "off") {
+              ferOff.innerHTML = "กำลังปิด"
+              ferOn.innerHTML = "ON"
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error.message);
+            buttonOn.innerHTML = "status not found";
+            buttonOff.innerHTML = "status not found";
+          });
+      });
+    });
+
+
+    function setWaterPump(state) {
+      //var state=document.getElementById('waterPump').value;
+      var id = "pump";
+      console.log(state);
+
+      $.post("/pump", { "device": id, "status": state }, function (data) {
+        console.log("Sending: " + data)
+        //var obj = JSON.parse(data);
+        alert("Status: " + data.status);
+        //alert("Set Water Pump Success");
+      });
+    }
+
+    function setFertilizer(state) {
+      //var state=document.getElementById('waterPump').value;
+      var id = "fertilizer";
+      console.log(state);
+
+      $.post("/fertilizer", { "device": id, "status": state }, function (data) {
+        console.log("Sending: " + data)
+        //var obj = JSON.parse(data);
+        alert("Status: " + data.status);
+        //alert("Set Water Pump Success");
+      });
+    }
+
+    function setLight(state) {
+      //var state=document.getElementById('waterPump').value;
+      var id = "light";
+      console.log(state);
+
+      $.post("/light", { "device": id, "status": state }, function (data) {
+        console.log("Sending: " + data)
+        //var obj = JSON.parse(data);
+        alert("Status: " + data.status);
+        //alert("Set Water Pump Success");
+      });
+    }
+
+
+
+
+
+
+
+  </script>
+
+
+</body>
+
+
+</html>

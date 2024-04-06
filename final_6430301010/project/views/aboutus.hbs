@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            display: flex; /* Use flexbox */
+            justify-content: space-around; /* Align items with space around them */
+        }
+        
+        .member {
+            flex: 1; /* Make the members take equal space */
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .member h2 {
+            color: #555;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .member p {
+            color: #777;
+            font-size: 16px;
+            margin: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+{{>navbar}}
+<body>
+    <header>
+        <h1>Abouts</h1>
+    </header>
+    <div class="container">
+        <div class="member">
+            <h2>Phatsakorn Singthongyam</h2>
+            <p>Student ID: 6430300722</p>
+        </div>
+        <div class="member">
+            <h2>Sarayuth Boonlong</h2>
+            <p>Student ID: 6430300986</p>
+        </div>
+        <div class="member">
+            <h2>Yanisa Sangjamnong</h2>
+            <p>Student ID: 6430300269</p>
+        </div>
+        <div class="member">
+            <h2>Surakan Machan</h2>
+            <p>Student ID: 6430301010</p>
+        </div>
+    </div>
+</body>
+
+</html>

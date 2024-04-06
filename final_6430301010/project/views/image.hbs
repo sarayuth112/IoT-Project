@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .upload-form {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        input[type="text"],
+        input[type="file"],
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: calc(100% - 22px);
+        }
+
+        #imageInput {
+            display: block;
+            margin: 0 auto;
+        }
+
+        #preview {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            margin-top: 20px;
+            display: block;
+            border-radius: 4px;
+        }
+
+        #uploadButton {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        #uploadButton:hover {
+            background-color: #45a049;
+        }
+
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .image-gallery img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .image-gallery img:hover {
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+{{>navbar}}
+<body>
+    <div class="container">
+        <h1>Image Gallery</h1>
+        <div class="upload-form">
+            <input type="text" id="textInput" placeholder="Enter text...">
+            <input type="file" id="imageInput" accept="image/*" onchange="previewImage(event)">
+        </div>
+
+        <img id="preview" src="#" alt="Image Preview">
+
+        <div class="upload-form">
+            <button id="uploadButton" onclick="uploadImage()">Upload</button>
+        </div>
+
+        <div class="image-gallery"></div>
+    </div>
+
+    
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        function previewImage(event) {
+            var preview = document.getElementById('preview');
+            var file = event.target.files[0];
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+            } else {
+                // Handle case where no image is selected
+            }
+        }
+
+        function uploadImage() {
+            var fileInput = document.getElementById('imageInput');
+            var file = fileInput.files[0];
+            var formData = new FormData();
+            formData.append('image', file);
+            formData.append('text', document.getElementById('textInput').value);
+
+            $.ajax({
+                url: "/upload_image",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    alert("Image uploaded successfully");
+                    // Reload the image gallery after successful upload
+                    reloadImageGallery();
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText); // Log server response
+                    console.error(error); // Log error message
+                    alert("Failed to upload image");
+                }
+            });
+        }
+
+        function reloadImageGallery() {
+            var gallery = $('.image-gallery');
+            gallery.empty(); // Clear the gallery
+            // Fetch and display images
+            $.get("/images", function (images) {
+                images.forEach(function (image) {
+                    gallery.append(`<img src="/${image.filename}" alt="${image.filename}" class="img-thumbnail">`);
+                });
+            });
+        }
+
+        $(document).ready(function () {
+            // Fetch and display images when the page loads
+            reloadImageGallery();
+
+            // Open image in new tab when clicked
+            $(document).on('click', '.image-gallery img', function () {
+                window.open($(this).attr('src'), '_blank');
+            });
+        });
+    </script>
+</body>
+</html>

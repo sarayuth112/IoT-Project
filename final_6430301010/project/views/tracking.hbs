@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="refresh" content="10">
+  <title>Your Page Title</title>
+  <link rel="stylesheet" type="text/css" href="../assets/js/core/jquery.dataTables.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 20px 0;
+      text-align: center;
+    }
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #333;
+      color: #fff;
+    }
+    tbody tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+    /* Custom styling for the search box */
+    .dataTables_filter input {
+      width: 70%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+    }
+    .dataTables_filter label {
+      font-weight: bold;
+    }
+  </style>
+</head>
+{{>navbar}}
+<body>
+  <header>
+    <h1>Tracking</h1>
+  </header>
+  <div class="container">
+    <table id="example" class="display" cellspacing="0">
+      <thead>
+        <tr>
+          <th>ชื่ออุปกรณ์</th>
+          <th>การกระทำ</th>  
+          <th>เวลา</th>  
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <th>ชื่ออุปกรณ์</th>
+          <th>การกระทำ</th>
+          <th>เวลา</th>         
+        </tr>
+      </tfoot>
+      <tbody>
+        {{#each log}}           
+          <tr align="center">
+            <td>{{this.type}}</td>
+            <td>{{this.status}}</td>
+            <td>{{this.time}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+  <script src="../assets/js/core/jquery-1.12.0.min.js"></script>
+  <script src="../assets/js/core/jquery.dataTables.min.js"></script>
+  <script>
+  $(document).ready(function() {
+    var table = $('#example').DataTable({
+      "order": [[2, "desc"]] // เรียงลำดับโดยคอลัมน์ที่ 2 (เวลา) จากมากไปหาน้อย (ล่าสุดไปยังเก่า)
+    });
+  });
+</script>
+</body>
+</html>
