@@ -1,2 +1,3 @@
 โปรเจคนี้เป็นเว็ปไซต์ที่ใช้ Framworkของ Javascript กับ Bootstrap ที่เกี่ยวกับการรดน้ำพืชให้ปุ๋ยเเละการเปิดปิดเเสงไฟเเละในส่วนของหน้าเเรกที่เปิดเข้าโปรเเกรมจะเป็นการบอกค่าของพืชต่างๆ
-ว่าพืชมีสารอาหารเท่าไหรโดยมีการใช้ความรู้ต่างๆเช่น Ajax,Websocket,MQTT,Postman,Python,Database(MongoDV) เเละใช้ Linuxในการอัพโค็ดPythonให้ Rasberry Pi
+ว่าพืชมีสารอาหารเท่าไหรโดยมีการใช้ความรู้ต่างๆเช่น Ajax,Websocket,MQTT,Postman,Python,Database(MongoDV) เเละใช้ Linux ในการSSHเข้าไปอัพโค็ด Python ให้ Rasberry Pi
+สามารถใช้งานได้โดยใช้ MQTT เป็นตัวสั่งเปิดปิด
